@@ -6,11 +6,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
+public class SecurityConfig {
     // Dans un projet qui passe en production il faut bien sûr configurer la sécurité,
     // ici on contourne la securite on utilisant csrf().disable() et permitAll() pour accélérer les choses
     @Bean

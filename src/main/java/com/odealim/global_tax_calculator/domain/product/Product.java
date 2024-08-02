@@ -1,4 +1,4 @@
-package com.odealim.global_tax_calculator.domain.model;
+package com.odealim.global_tax_calculator.domain.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
