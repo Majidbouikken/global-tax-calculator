@@ -4,6 +4,7 @@ import com.odealim.global_tax_calculator.application.service.ProductService;
 import com.odealim.global_tax_calculator.domain.product.PriceDTO;
 import com.odealim.global_tax_calculator.domain.product.Product;
 import com.odealim.global_tax_calculator.infrastructure.exception.ProductNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @ApiOperation(value = "Create Product", notes = "Ajouter un nouveau Produit")
+    @Operation(summary = "Ajouter un nouveau Produit")
     @PostMapping
     public ResponseEntity<Object> createProduct(@Valid @RequestBody Product product, BindingResult result) {
         if (result.hasErrors()) {
@@ -32,7 +33,7 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
-//    @ApiOperation(value = "Get Product", notes = "Récupérer les détails d'un produit par son ID.")
+    @Operation(summary = "Récupérer les détails d'un produit par son ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         try {
@@ -43,7 +44,7 @@ public class ProductController {
         }
     }
 
-//    @ApiOperation(value = "Calculate Final Price", notes = "Calculer et retourner le prix final d'un produit incluant les taxes, basé sur le pays.")
+    @Operation(summary = "Calculer et retourner le prix final d'un produit incluant les taxes, basé sur le pays.")
     @GetMapping("/calculate-price/{id}")
     public ResponseEntity<PriceDTO> calculateFinalPrice(@PathVariable("id") Long id) {
         try {
