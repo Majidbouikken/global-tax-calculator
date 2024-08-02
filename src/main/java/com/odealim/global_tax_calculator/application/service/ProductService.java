@@ -3,7 +3,7 @@ package com.odealim.global_tax_calculator.application.service;
 import com.odealim.global_tax_calculator.domain.product.Country;
 import com.odealim.global_tax_calculator.domain.product.PriceDTO;
 import com.odealim.global_tax_calculator.domain.product.Product;
-import com.odealim.global_tax_calculator.domain.product.TaxStrategy;
+import com.odealim.global_tax_calculator.domain.product.tax_strategy.TaxStrategy;
 import com.odealim.global_tax_calculator.infrastructure.exception.ProductNotFoundException;
 import com.odealim.global_tax_calculator.infrastructure.repository.ProductRepository;
 import org.springframework.stereotype.Service;

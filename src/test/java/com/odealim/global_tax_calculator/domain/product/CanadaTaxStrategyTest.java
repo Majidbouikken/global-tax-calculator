@@ -1,5 +1,6 @@
 package com.odealim.global_tax_calculator.domain.product;
 
+import com.odealim.global_tax_calculator.domain.product.tax_strategy.CanadaTaxStrategy;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 

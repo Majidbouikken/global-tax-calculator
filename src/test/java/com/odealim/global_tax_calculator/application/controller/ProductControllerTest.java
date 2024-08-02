@@ -4,6 +4,7 @@ import com.odealim.global_tax_calculator.application.service.ProductService;
 import com.odealim.global_tax_calculator.domain.product.Country;
 import com.odealim.global_tax_calculator.domain.product.PriceDTO;
 import com.odealim.global_tax_calculator.domain.product.Product;
+import com.odealim.global_tax_calculator.infrastructure.exception.ErrorResponse;
 import com.odealim.global_tax_calculator.infrastructure.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class ProductControllerTest {
@@ -90,7 +92,7 @@ public class ProductControllerTest {
         when(productService.getProductById(1L)).thenReturn(product);
 
         // Agir
-        ResponseEntity<Product> responseEntity = productController.getProduct(1L);
+        ResponseEntity<Object> responseEntity = productController.getProduct(1L);
 
         // Affirmer
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode(), "HTTP status should be OK");
@@ -103,11 +105,15 @@ public class ProductControllerTest {
         when(productService.getProductById(1L)).thenThrow(new ProductNotFoundException("Product not found"));
 
         // Agir
-        ResponseEntity<Product> responseEntity = productController.getProduct(1L);
+        ResponseEntity<Object> responseEntity = productController.getProduct(1L);
 
         // Affirmer
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode(), "HTTP status should be BAD_REQUEST");
-        assertEquals(new Product(), responseEntity.getBody(), "Response body should be a new Product instance");
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof ErrorResponse);
+
+        ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+        assertEquals("Product not found", errorResponse.getMessage());
+        assertEquals("Product not found", errorResponse.getDetails());
     }
 
     @Test
@@ -116,11 +122,15 @@ public class ProductControllerTest {
         when(productService.getProductById(1L)).thenThrow(new IllegalArgumentException("Invalid argument"));
 
         // Agir
-        ResponseEntity<Product> responseEntity = productController.getProduct(1L);
+        ResponseEntity<Object> responseEntity = productController.getProduct(1L);
 
         // Affirmer
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode(), "HTTP status should be BAD_REQUEST");
-        assertEquals(new Product(), responseEntity.getBody(), "Response body should be a new Product instance");
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof ErrorResponse);
+
+        ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+        assertEquals("Invalid request", errorResponse.getMessage());
+        assertEquals("Invalid argument", errorResponse.getDetails());
     }
 
     @Test
@@ -130,7 +140,7 @@ public class ProductControllerTest {
         when(productService.getFinalPrice(1L)).thenReturn(expectedPriceDTO);
 
         // Agir
-        ResponseEntity<PriceDTO> responseEntity = productController.calculateFinalPrice(1L);
+        ResponseEntity<Object> responseEntity = productController.calculateFinalPrice(1L);
 
         // Affirmer
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode(), "HTTP status should be OK");
@@ -143,13 +153,11 @@ public class ProductControllerTest {
         when(productService.getFinalPrice(1L)).thenThrow(new ProductNotFoundException("Product not found"));
 
         // Agir
-        ResponseEntity<PriceDTO> responseEntity = productController.calculateFinalPrice(1L);
+        ResponseEntity<Object> responseEntity = productController.calculateFinalPrice(1L);
 
         // Affirmer
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode(), "HTTP status should be BAD_REQUEST");
-        PriceDTO expectedPriceDTO = new PriceDTO(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-        assertEquals(expectedPriceDTO, responseEntity.getBody(), "PriceDTO in response should be default values");
-    }
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof ErrorResponse); }
 
     @Test
     public void testCalculateFinalPrice_InvalidArgument() {
@@ -157,11 +165,14 @@ public class ProductControllerTest {
         when(productService.getFinalPrice(1L)).thenThrow(new IllegalArgumentException("Invalid argument"));
 
         // Agir
-        ResponseEntity<PriceDTO> responseEntity = productController.calculateFinalPrice(1L);
+        ResponseEntity<Object> responseEntity = productController.calculateFinalPrice(1L);
 
         // Affirmer
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode(), "HTTP status should be BAD_REQUEST");
-        PriceDTO expectedPriceDTO = new PriceDTO(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-        assertEquals(expectedPriceDTO, responseEntity.getBody(), "PriceDTO in response should be default values");
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof ErrorResponse);
+
+        ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+        assertEquals("Invalid request", errorResponse.getMessage());
+        assertEquals("Invalid argument", errorResponse.getDetails());
     }
 }
