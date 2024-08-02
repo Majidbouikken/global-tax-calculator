@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/products")
+//@Api(value = "Product API", tags = "")
 public class ProductController {
     private final ProductService productService;
 
@@ -21,7 +22,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // Ajouter un nouveau produit
+//    @ApiOperation(value = "Create Product", notes = "Ajouter un nouveau Produit")
     @PostMapping
     public ResponseEntity<Object> createProduct(@Valid @RequestBody Product product, BindingResult result) {
         if (result.hasErrors()) {
@@ -31,7 +32,7 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
-    // Récupérer les détails d'un produit par son ID.
+//    @ApiOperation(value = "Get Product", notes = "Récupérer les détails d'un produit par son ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         try {
@@ -42,6 +43,7 @@ public class ProductController {
         }
     }
 
+//    @ApiOperation(value = "Calculate Final Price", notes = "Calculer et retourner le prix final d'un produit incluant les taxes, basé sur le pays.")
     @GetMapping("/calculate-price/{id}")
     public ResponseEntity<PriceDTO> calculateFinalPrice(@PathVariable("id") Long id) {
         try {
