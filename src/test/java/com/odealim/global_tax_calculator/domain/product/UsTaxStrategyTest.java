@@ -1,9 +1,8 @@
 package com.odealim.global_tax_calculator.domain.product;
 
+import com.odealim.global_tax_calculator.domain.product.tax_strategy.UsTaxStrategy;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
