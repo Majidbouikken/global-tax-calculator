@@ -22,4 +22,13 @@ public class SecurityConfiguration {
                 .csrf().disable();
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((authorized) -> authorized
+//                        .anyRequest().authenticated()
+//                )
+//                .httpBasic(withDefaults());
+//        return http.build();
 }
